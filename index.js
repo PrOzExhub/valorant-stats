@@ -7,10 +7,10 @@ const mongoose = require('mongoose')
 
 // Connecting to database
 mongoose.connect(process.env.MONGODB_URI, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 }).then(() => {
-	console.log('Connected to MongoDB Database')
+    console.log('mongodb+srv://PrOzEx:mfzbt000@cluster0.yntzx.mongodb.net/Cluster0?retryWrites=true&w=majority')
 }).catch((error) => console.log(error))
 
 // Check for Javascript file in the command folder
@@ -18,31 +18,31 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 // Check through all files in the commands folder
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.name, command);
 }
 
 // Set bot activity
 client.on('ready', () => {
-	console.log(`Logged in as ${client.user.tag}!`);
-	client.user.setActivity(`${client.guilds.cache.size} servers | v!help`, { type: "WATCHING" })
-	// let activities = [ `${client.guilds.cache.size} servers`, `${client.channels.cache.size} chnls`, `${client.users.cache.size} users` ], i = 0;
-	// setInterval(() => client.user.setActivity(`${activities[i ++ % activities.length]} | v!help`, { type: "WATCHING"}),`5000`)
+    console.log(`Logged in as ${client.user.tag}!`);
+    client.user.setActivity(`${client.guilds.cache.size} servers | v!help`, { type: "WATCHING" })
+        // let activities = [ `${client.guilds.cache.size} servers`, `${client.channels.cache.size} chnls`, `${client.users.cache.size} users` ], i = 0;
+        // setInterval(() => client.user.setActivity(`${activities[i ++ % activities.length]} | v!help`, { type: "WATCHING"}),`5000`)
 })
 
 // Checking messages and executing commands
 client.on('message', async message => {
-	if (!message.content.startsWith(process.env.PREFIX) || message.author.bot) return; // Return nothing if there is no prefix or if the bot is messaging
+    if (!message.content.startsWith(process.env.PREFIX) || message.author.bot) return; // Return nothing if there is no prefix or if the bot is messaging
 
-	const args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
-	const command = client.commands.get(commandName) || client.commands.find(a => a.aliases && a.aliases.includes(commandName))
+    const args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/);
+    const commandName = args.shift().toLowerCase();
+    const command = client.commands.get(commandName) || client.commands.find(a => a.aliases && a.aliases.includes(commandName))
 
-	try {
-		command.execute(message, args, commandName)
-	} catch (error) {
-		console.error(error);
-	}
+    try {
+        command.execute(message, args, commandName)
+    } catch (error) {
+        console.error(error);
+    }
 
 });
 
